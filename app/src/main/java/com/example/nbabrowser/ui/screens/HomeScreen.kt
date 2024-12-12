@@ -1,13 +1,15 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalGlideComposeApi::class)
 
 package com.example.nbabrowser.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
@@ -26,6 +28,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,6 +37,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.nbabrowser.R
 import com.example.nbabrowser.model.Player
 import com.example.nbabrowser.model.Team
@@ -112,7 +118,7 @@ fun ResultScreen(
 
         LazyColumn (
             state = rememberLazyListState(),
-            contentPadding = PaddingValues(16.dp),
+            contentPadding = PaddingValues(dimensionResource(R.dimen.horizontal_padding)),
             modifier = Modifier.fillMaxSize(),
         ) {
             items(players.itemCount, key = players.itemKey { it.id }) { index ->
@@ -144,22 +150,31 @@ fun PlayerItem(player: Player, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(vertical = 8.dp)
     ) {
-        Column (
-            modifier = Modifier.padding(8.dp)
-        ) {
-            Text(
-                text = "${player.firstName} ${player.lastName}",
-                style = MaterialTheme.typography.titleLarge
+        Row() {
+            GlideImage(
+                model = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png",
+                contentDescription = "Player image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.size(80.dp)
             )
-            Text(
-                text = player.position,
-                style = MaterialTheme.typography.bodyLarge
-            )
-            Text(
-                player.team.name,
-                style = MaterialTheme.typography.bodyMedium
-            )
+            Column (
+                modifier = Modifier.padding(8.dp).weight(1f)
+            ) {
+                Text(
+                    text = "${player.firstName} ${player.lastName}",
+                    style = MaterialTheme.typography.titleLarge
+                )
+                Text(
+                    text = player.position,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+                Text(
+                    player.team.name,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
+
     }
 }
 

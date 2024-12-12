@@ -1,12 +1,19 @@
+@file:OptIn(ExperimentalGlideComposeApi::class)
+
 package com.example.nbabrowser.ui.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowForward
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,10 +25,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.example.nbabrowser.R
 import com.example.nbabrowser.model.Player
 import com.example.nbabrowser.model.Team
@@ -33,7 +45,7 @@ import com.example.nbabrowser.ui.shared.LoadingScreen
 import com.example.nbabrowser.ui.shared.SimpleLabel
 import com.example.nbabrowser.ui.shared.ValueWithLabel
 
-object PlayerDestination: NavigationDestination {
+object PlayerDestination : NavigationDestination {
     override val route: String = "player_detail"
     const val playerIdArg = "playerId"
     val routeWithArgs = "$route/{$playerIdArg}"
@@ -52,11 +64,13 @@ fun PlayerScreen(
 
     Scaffold(
         modifier = modifier,
-        topBar = { TopAppBar(
-            title = PlayerDestination.titleRes,
-            canNavigateBack = true,
-            navigateUp = onNavigateUp
-        ) }
+        topBar = {
+            TopAppBar(
+                title = PlayerDestination.titleRes,
+                canNavigateBack = true,
+                navigateUp = onNavigateUp
+            )
+        }
     ) {
         Surface(
             modifier = Modifier.fillMaxSize()
@@ -64,7 +78,9 @@ fun PlayerScreen(
             PlayerBody(
                 onTeamClick = { navigateToTeam(it.id) },
                 uiState = uiState,
-                modifier = Modifier.padding(it)
+                modifier = Modifier.padding(
+                    top = it.calculateTopPadding()
+                )
             )
         }
     }
@@ -72,49 +88,82 @@ fun PlayerScreen(
 
 @Composable
 fun PlayerBody(onTeamClick: (Team) -> Unit, uiState: PlayerUiState, modifier: Modifier = Modifier) {
-    when (uiState) {
-        is PlayerUiState.Loading -> LoadingScreen(modifier = modifier)
-        is PlayerUiState.Success -> PlayerDetail(
-            onTeamClick = onTeamClick,
-            player = uiState.player,
-            modifier = modifier
-        )
-        is PlayerUiState.Error -> ErrorScreen( modifier = modifier)
+    Box(modifier = modifier) {
+        when (uiState) {
+            is PlayerUiState.Loading -> LoadingScreen()
+            is PlayerUiState.Success -> PlayerDetail(
+                onTeamClick = onTeamClick,
+                player = uiState.player
+            )
+
+            is PlayerUiState.Error -> ErrorScreen()
+        }
     }
 }
 
 @Composable
 fun PlayerDetail(onTeamClick: (Team) -> Unit, player: Player, modifier: Modifier = Modifier) {
-    Column (modifier = modifier.padding(horizontal = 8.dp)) {
-        ValueWithLabel(R.string.name_label, "${player.firstName} ${player.lastName}")
-        ValueWithLabel(R.string.position_label, player.position)
-        ValueWithLabel(R.string.height_label, player.height)
-        ValueWithLabel(R.string.weight_label, player.weight)
-        ValueWithLabel(R.string.jersey_number_label, player.jerseyNumber)
-        ValueWithLabel(R.string.college_label, player.college)
-        ValueWithLabel(R.string.country_label, player.country)
+    Column(
+        modifier = modifier
+            .padding(horizontal = dimensionResource(R.dimen.horizontal_padding))
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = dimensionResource(R.dimen.bottom_padding))
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            GlideImage(
+                model = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png",
+                contentDescription = "Player image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(180.dp)
+                    .clip(CircleShape),
+                alignment = Alignment.Center
+            )
 
-        if (player.draftYear != null) {
-            ValueWithLabel(R.string.draft_year_label, player.draftYear.toString())
+            Text(
+                modifier = Modifier.padding(vertical = 16.dp),
+                text = "${player.firstName} ${player.lastName}",
+                style = MaterialTheme.typography.titleLarge
+            )
         }
+        Column {
+            ValueWithLabel(R.string.position_label, player.position)
+            ValueWithLabel(R.string.height_label, player.height)
+            ValueWithLabel(R.string.weight_label, player.weight)
+            ValueWithLabel(R.string.jersey_number_label, player.jerseyNumber)
+            ValueWithLabel(R.string.college_label, player.college)
+            ValueWithLabel(R.string.country_label, player.country)
 
-        if (player.draftRound != null) {
-            ValueWithLabel(R.string.draft_round_label, player.draftRound.toString())
+            if (player.draftYear != null) {
+                ValueWithLabel(R.string.draft_year_label, player.draftYear.toString())
+            }
+
+            if (player.draftRound != null) {
+                ValueWithLabel(R.string.draft_round_label, player.draftRound.toString())
+            }
+
+            if (player.draftNumber != null) {
+                ValueWithLabel(R.string.draft_number_label, player.draftNumber.toString())
+            }
+
+            TeamShort(onTeamClick, player.team)
         }
-
-        if (player.draftNumber != null) {
-            ValueWithLabel(R.string.draft_number_label, player.draftNumber.toString())
-        }
-
-        TeamShort(onTeamClick, player.team)
     }
+
 }
 
 @Composable
 fun TeamShort(onTeamClick: (Team) -> Unit, team: Team, modifier: Modifier = Modifier) {
-    Column(modifier = Modifier.fillMaxWidth().padding(top = 16.dp).clickable { onTeamClick(team) }) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .clickable { onTeamClick(team) }) {
         SimpleLabel(R.string.team_label)
-        Row (
+        Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween

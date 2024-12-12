@@ -1,14 +1,17 @@
 package com.example.nbabrowser.ui.screens
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nbabrowser.R
 import com.example.nbabrowser.model.Team
@@ -19,7 +22,7 @@ import com.example.nbabrowser.ui.shared.ErrorScreen
 import com.example.nbabrowser.ui.shared.LoadingScreen
 import com.example.nbabrowser.ui.shared.ValueWithLabel
 
-object TeamDestination: NavigationDestination {
+object TeamDestination : NavigationDestination {
     override val route: String = "team_detail"
     const val teamIdArg = "teamId"
     val routeWithArgs = "$route/{$teamIdArg}"
@@ -37,34 +40,45 @@ fun TeamScreen(
 
     Scaffold(
         modifier = modifier,
-        topBar = { TopAppBar(
-            title = TeamDestination.titleRes,
-            canNavigateBack = true,
-            navigateUp = onNavigateUp
-        ) }
+        topBar = {
+            TopAppBar(
+                title = TeamDestination.titleRes,
+                canNavigateBack = true,
+                navigateUp = onNavigateUp
+            )
+        }
     ) {
         Surface(
             modifier = Modifier.fillMaxSize()
         ) {
-            TeamBody(uiState = uiState, Modifier.fillMaxSize().padding(it))
+            TeamBody(
+                uiState = uiState, modifier = Modifier.padding(
+                    top = it.calculateTopPadding()
+                )
+            )
         }
     }
 }
 
 @Composable
 fun TeamBody(uiState: TeamUiState, modifier: Modifier = Modifier) {
-    when (uiState) {
-        is TeamUiState.Loading -> LoadingScreen(modifier = modifier)
-        is TeamUiState.Success -> TeamDetail(
-            uiState.team, modifier = modifier
-        )
-        is TeamUiState.Error -> ErrorScreen( modifier = modifier)
+    Box(modifier = modifier) {
+        when (uiState) {
+            is TeamUiState.Loading -> LoadingScreen()
+            is TeamUiState.Success -> TeamDetail(uiState.team)
+            is TeamUiState.Error -> ErrorScreen()
+        }
     }
 }
 
 @Composable
 fun TeamDetail(player: Team, modifier: Modifier = Modifier) {
-    Column (modifier = modifier.padding(horizontal = 8.dp)) {
+    Column(
+        modifier = modifier
+            .padding(horizontal = dimensionResource(R.dimen.horizontal_padding))
+            .verticalScroll(rememberScrollState())
+            .padding(bottom = dimensionResource(R.dimen.bottom_padding))
+    ) {
         ValueWithLabel(R.string.name_label, player.name)
         ValueWithLabel(R.string.full_name_label, player.fullName)
         ValueWithLabel(R.string.abbreviation_label, player.abbreviation)
