@@ -1,5 +1,6 @@
 package com.example.nbabrowser.ui.shared
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -45,4 +46,15 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
         )
         Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
     }
+}
+
+@Composable
+fun ValueWithLabel(@StringRes title: Int, text: String) {
+    SimpleLabel(title)
+    Text(text)
+}
+
+@Composable
+fun SimpleLabel(@StringRes title: Int, modifier: Modifier = Modifier) {
+    Text(text = stringResource(title), modifier = modifier)
 }

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.nbabrowser.NBABrowserApplication
 import com.example.nbabrowser.ui.screens.HomeViewModel
 import com.example.nbabrowser.ui.screens.PlayerViewModel
+import com.example.nbabrowser.ui.screens.TeamViewModel
 
 object AppViewModelProvider {
     val Factory = viewModelFactory {
@@ -16,6 +17,9 @@ object AppViewModelProvider {
         }
         initializer {
             PlayerViewModel(this.createSavedStateHandle(), nbaApplication().container.nbaRepository)
+        }
+        initializer {
+            TeamViewModel(this.createSavedStateHandle(), nbaApplication().container.nbaRepository)
         }
     }
 }
