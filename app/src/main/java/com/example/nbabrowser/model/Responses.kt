@@ -10,6 +10,16 @@ data class PlayersResponse(
 )
 
 @Serializable
+data class PlayerResponse(
+    val data: Player
+)
+
+@Serializable
+data class TeamResponse(
+    val data: Team
+)
+
+@Serializable
 data class MetaData(
     @SerialName(value = "next_cursor")
     val nextCursor: Int,

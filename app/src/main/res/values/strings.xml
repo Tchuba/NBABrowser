@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">NBABrowser</string>
+    <string name="player_title">Player</string>
+    <string name="team_title">Team</string>
     <string name="loading">Loading</string>
     <string name="loading_failed">Loading failed</string>
+    <string name="position_label">Position</string>
+    <string name="back_button">Back</string>
 </resources>
