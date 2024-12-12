@@ -8,6 +8,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.nbabrowser.R
 import com.example.nbabrowser.model.Team
@@ -63,7 +64,12 @@ fun TeamBody(uiState: TeamUiState, modifier: Modifier = Modifier) {
 
 @Composable
 fun TeamDetail(player: Team, modifier: Modifier = Modifier) {
-    Column (modifier = modifier) {
+    Column (modifier = modifier.padding(horizontal = 8.dp)) {
         ValueWithLabel(R.string.name_label, player.name)
+        ValueWithLabel(R.string.full_name_label, player.fullName)
+        ValueWithLabel(R.string.abbreviation_label, player.abbreviation)
+        ValueWithLabel(R.string.conference_label, player.conference)
+        ValueWithLabel(R.string.division_label, player.division)
+        ValueWithLabel(R.string.city_label, player.city)
     }
 }

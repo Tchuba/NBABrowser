@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
@@ -16,8 +17,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.nbabrowser.R
+import com.example.nbabrowser.ui.theme.NBABrowserTheme
 
 @Composable
 fun LoadingScreen(modifier: Modifier = Modifier) {
@@ -49,12 +52,48 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ValueWithLabel(@StringRes title: Int, text: String) {
-    SimpleLabel(title)
-    Text(text)
+fun ValueWithLabel(@StringRes title: Int, text: String, modifier: Modifier = Modifier) {
+    Column (modifier = modifier.fillMaxWidth().padding(top = 8.dp)){
+        SimpleLabel(title)
+        Text(
+            text,
+            style = MaterialTheme.typography.titleMedium
+        )
+    }
 }
 
 @Composable
 fun SimpleLabel(@StringRes title: Int, modifier: Modifier = Modifier) {
-    Text(text = stringResource(title), modifier = modifier)
+    Text(
+        text = stringResource(title),
+        modifier = modifier,
+        style = MaterialTheme.typography.labelMedium
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoadingScreenPreview() {
+    NBABrowserTheme {
+        LoadingScreen()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ErrorScreenPreview() {
+    NBABrowserTheme {
+        ErrorScreen()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ValueWithLabelPreview() {
+    NBABrowserTheme {
+        ValueWithLabel(
+            R.string.position_label,
+            "G"
+        )
+    }
 }

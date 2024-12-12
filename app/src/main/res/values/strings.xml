@@ -9,4 +9,17 @@
     <string name="back_button">Back</string>
     <string name="team_detail">Team detail</string>
     <string name="team_label">Team</string>
+    <string name="full_name_label">Full name</string>
+    <string name="abbreviation_label">Abbreviation</string>
+    <string name="conference_label">Conference</string>
+    <string name="division_label">Division</string>
+    <string name="city_label">City</string>
+    <string name="height_label">Height</string>
+    <string name="weight_label">Weight</string>
+    <string name="jersey_number_label">Jersey number</string>
+    <string name="college_label">College</string>
+    <string name="country_label">Country</string>
+    <string name="draft_year_label">Draft year</string>
+    <string name="draft_round_label">Draft round</string>
+    <string name="draft_number_label">Draft number</string>
 </resources>

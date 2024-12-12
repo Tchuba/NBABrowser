@@ -35,11 +35,11 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.example.nbabrowser.R
 import com.example.nbabrowser.model.Player
+import com.example.nbabrowser.model.Team
 import com.example.nbabrowser.ui.AppViewModelProvider
 import com.example.nbabrowser.ui.TopAppBar
 import com.example.nbabrowser.ui.navigation.NavigationDestination
 import com.example.nbabrowser.ui.shared.ErrorScreen
-import com.example.nbabrowser.ui.shared.LoadingScreen
 import com.example.nbabrowser.ui.theme.NBABrowserTheme
 
 object HomeDestination: NavigationDestination {
@@ -98,8 +98,6 @@ fun ResultScreen(
     val isRefreshing by remember {
         derivedStateOf { players.loadState.refresh is LoadState.Loading }
     }
-//    val isRefreshing by remember { mutableStateOf(false) }
-
     PullToRefreshBox (
         isRefreshing = isRefreshing,
         state = pullToRefreshState,
@@ -114,7 +112,7 @@ fun ResultScreen(
 
         LazyColumn (
             state = rememberLazyListState(),
-            contentPadding = PaddingValues(8.dp),
+            contentPadding = PaddingValues(16.dp),
             modifier = Modifier.fillMaxSize(),
         ) {
             items(players.itemCount, key = players.itemKey { it.id }) { index ->
@@ -149,25 +147,42 @@ fun PlayerItem(player: Player, modifier: Modifier = Modifier) {
         Column (
             modifier = Modifier.padding(8.dp)
         ) {
-            Text("${player.firstName} ${player.lastName}")
-            Text(player.position)
-            Text(player.team.name)
+            Text(
+                text = "${player.firstName} ${player.lastName}",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                text = player.position,
+                style = MaterialTheme.typography.bodyLarge
+            )
+            Text(
+                player.team.name,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun LoadingScreenPreview() {
+fun PlayerItemPreview() {
     NBABrowserTheme {
-        LoadingScreen()
-    }
-}
+        val player = Player(
+            1,
+            "Alex",
+            "Abrines",
+            "G",
+            "",
+            "",
+            "",
+            "",
+            "",
+            0,
+            0,
+            0,
+            Team(1, "", "", "", "Thunder", "", "")
+        )
 
-@Preview(showBackground = true)
-@Composable
-fun ErrorScreenPreview() {
-    NBABrowserTheme {
-        ErrorScreen()
+        PlayerItem(player)
     }
 }
