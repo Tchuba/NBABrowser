@@ -25,7 +25,7 @@ class PlayerViewModel(
     var uiState: PlayerUiState by mutableStateOf(PlayerUiState.Loading)
         private set
 
-    private val playerId: Int = checkNotNull(savedStateHandle[PlayerDestination.playerIdArg])
+    private val playerId: Int = checkNotNull(savedStateHandle[PlayerDestination.PLAYER_ID_ARG])
 
     init {
         getPlayer()

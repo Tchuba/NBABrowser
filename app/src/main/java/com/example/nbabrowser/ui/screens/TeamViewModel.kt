@@ -25,7 +25,7 @@ class TeamViewModel(
     var uiState: TeamUiState by mutableStateOf(TeamUiState.Loading)
         private set
 
-    private val teamId: Int = checkNotNull(savedStateHandle[TeamDestination.teamIdArg])
+    private val teamId: Int = checkNotNull(savedStateHandle[TeamDestination.TEAM_ID_ARG])
 
     init {
         getTeam()

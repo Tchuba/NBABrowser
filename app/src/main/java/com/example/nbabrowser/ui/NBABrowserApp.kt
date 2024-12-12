@@ -50,7 +50,7 @@ fun NBABrowserApp(
         }
         composable(
             route = PlayerDestination.routeWithArgs,
-            arguments = listOf(navArgument(PlayerDestination.playerIdArg) {
+            arguments = listOf(navArgument(PlayerDestination.PLAYER_ID_ARG) {
                 type = NavType.IntType
             })
         ) {
@@ -61,7 +61,7 @@ fun NBABrowserApp(
         }
         composable(
             route = TeamDestination.routeWithArgs,
-            arguments = listOf(navArgument(TeamDestination.teamIdArg) {
+            arguments = listOf(navArgument(TeamDestination.TEAM_ID_ARG) {
                 type = NavType.IntType
             })
         ) {

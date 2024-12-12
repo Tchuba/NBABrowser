@@ -47,8 +47,8 @@ import com.example.nbabrowser.ui.shared.ValueWithLabel
 
 object PlayerDestination : NavigationDestination {
     override val route: String = "player_detail"
-    const val playerIdArg = "playerId"
-    val routeWithArgs = "$route/{$playerIdArg}"
+    const val PLAYER_ID_ARG = "playerId"
+    val routeWithArgs = "$route/{$PLAYER_ID_ARG}"
     override val titleRes: Int = R.string.player_title
 }
 
