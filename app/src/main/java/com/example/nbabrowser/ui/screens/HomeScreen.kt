@@ -1,27 +1,38 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.example.nbabrowser.ui.screens
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.example.nbabrowser.R
 import com.example.nbabrowser.model.Player
 import com.example.nbabrowser.ui.AppViewModelProvider
@@ -44,7 +55,7 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = AppViewModelProvider.Factory)
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val uiState = viewModel.uiState
+    val players = viewModel.playersPagedData.collectAsLazyPagingItems()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
@@ -54,54 +65,76 @@ fun HomeScreen(
             canNavigateBack = false
         ) }
     ) {
-        Surface(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            HomeBody(uiState = uiState, navigateToPlayer =  navigateToPlayer, contentPadding = it)
-        }
+        HomeBody(
+            players = players,
+            navigateToPlayer = navigateToPlayer,
+            modifier = Modifier.padding(
+                top = it.calculateTopPadding()
+            )
+        )
     }
 }
 
 @Composable
 fun HomeBody(
-    uiState: HomeUiState,
+    players: LazyPagingItems<Player>,
     navigateToPlayer: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    when (uiState) {
-        is HomeUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize().padding(contentPadding))
-        is HomeUiState.Success -> ResultScreen(
-            players = uiState.players,
-            onPlayerClick = { navigateToPlayer(it.id) },
-            modifier = modifier.fillMaxWidth(),
-            contentPadding = contentPadding
-        )
-        is HomeUiState.Error -> ErrorScreen( modifier = modifier.fillMaxSize().padding(contentPadding))
-    }
+    ResultScreen(
+        players = players,
+        onPlayerClick = { navigateToPlayer(it.id) },
+        modifier = modifier,
+    )
 }
 
 @Composable
 fun ResultScreen(
-    players: List<Player>,
+    players: LazyPagingItems<Player>,
     onPlayerClick: (Player) -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    Box(
+    val pullToRefreshState = rememberPullToRefreshState()
+    val isRefreshing by remember {
+        derivedStateOf { players.loadState.refresh is LoadState.Loading }
+    }
+//    val isRefreshing by remember { mutableStateOf(false) }
+
+    PullToRefreshBox (
+        isRefreshing = isRefreshing,
+        state = pullToRefreshState,
+        onRefresh = { players.refresh() },
         contentAlignment = Alignment.Center,
         modifier = modifier
     ) {
+        when (players.loadState.refresh) {
+            is LoadState.Error -> ErrorScreen( modifier = Modifier.fillMaxSize())
+            else -> {}
+        }
+
         LazyColumn (
+            state = rememberLazyListState(),
+            contentPadding = PaddingValues(8.dp),
             modifier = Modifier.fillMaxSize(),
-            contentPadding = contentPadding
         ) {
-            items(
-                items = players,
-                key = { player -> player.id }
-            ) { player ->
-                PlayerItem(player = player, modifier = Modifier.clickable { onPlayerClick(player) })
+            items(players.itemCount, key = players.itemKey { it.id }) { index ->
+                val player = players[index]
+
+                if (player != null) {
+                    PlayerItem(player = player, modifier = Modifier.clickable { onPlayerClick(player) })
+                }
             }
+        }
+
+        when (players.loadState.append) {
+            is LoadState.Loading -> {
+                LinearProgressIndicator(
+                    modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
+                    color = MaterialTheme.colorScheme.secondary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant,
+                )
+            }
+            else -> {}
         }
     }
 }

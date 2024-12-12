@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
-private const val PAGE_SIZE = 35
+const val PAGE_SIZE = 35
 
 interface NBAApiService {
     @GET("players?per_page=${PAGE_SIZE}")

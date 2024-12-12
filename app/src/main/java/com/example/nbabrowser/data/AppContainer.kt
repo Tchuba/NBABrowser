@@ -8,6 +8,7 @@ import okhttp3.Interceptor
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 interface AppContainer {
@@ -17,7 +18,7 @@ interface AppContainer {
 class DefaultAppContainer: AppContainer {
     private val BASE_URL = "https://api.balldontlie.io/v1/"
 
-    private val authClient = OkHttpClient().newBuilder()
+    private val httpClient = OkHttpClient().newBuilder()
         .addInterceptor(
             Interceptor { chain ->
                 val request: Request = chain.request()
@@ -26,12 +27,14 @@ class DefaultAppContainer: AppContainer {
                     .build()
                 chain.proceed(request)
             }
-        )
+        ).addInterceptor(HttpLoggingInterceptor().apply {
+            this.level = HttpLoggingInterceptor.Level.BASIC
+        })
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .baseUrl(BASE_URL)
-        .client(authClient.build())
+        .client(httpClient.build())
         .build()
 
     private val retrofitService: NBAApiService by lazy {

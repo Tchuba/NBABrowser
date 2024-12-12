@@ -21,6 +21,8 @@ data class TeamResponse(
 
 @Serializable
 data class MetaData(
+    @SerialName(value = "prev_cursor")
+    val prevCursor: Int? = null,
     @SerialName(value = "next_cursor")
     val nextCursor: Int,
     @SerialName(value = "per_page")
