@@ -148,17 +148,17 @@ fun PlayerItem(player: Player, modifier: Modifier = Modifier) {
     Card (
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(vertical = dimensionResource(R.dimen.small_padding))
     ) {
         Row() {
             GlideImage(
                 model = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png",
                 contentDescription = "Player image",
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.size(80.dp)
+                modifier = Modifier.size(dimensionResource(R.dimen.small_photo_size))
             )
             Column (
-                modifier = Modifier.padding(8.dp).weight(1f)
+                modifier = Modifier.padding(dimensionResource(R.dimen.small_padding)).weight(1f)
             ) {
                 Text(
                     text = "${player.firstName} ${player.lastName}",

@@ -2,4 +2,9 @@
 <resources>
     <dimen name="horizontal_padding">16.dp</dimen>
     <dimen name="bottom_padding">48.dp</dimen>
+    <dimen name="small_photo_size">85.dp</dimen>
+    <dimen name="loading_indicator_size">64.dp</dimen>
+    <dimen name="small_padding">8.dp</dimen>
+    <dimen name="medium_padding">16.dp</dimen>
+    <dimen name="large_photo_size">180.dp</dimen>
 </resources>

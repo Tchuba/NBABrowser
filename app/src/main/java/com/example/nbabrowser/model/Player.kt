@@ -2,6 +2,7 @@ package com.example.nbabrowser.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class Player(
@@ -23,5 +24,7 @@ data class Player(
     val draftRound: Int?,
     @SerialName(value = "draft_number")
     val draftNumber: Int?,
-    val team: Team
+    val team: Team,
+    @Transient
+    val photo: String = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png"
 )

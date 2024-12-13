@@ -118,13 +118,13 @@ fun PlayerDetail(onTeamClick: (Team) -> Unit, player: Player, modifier: Modifier
                 contentDescription = "Player image",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(180.dp)
+                    .size(dimensionResource(R.dimen.large_photo_size))
                     .clip(CircleShape),
                 alignment = Alignment.Center
             )
 
             Text(
-                modifier = Modifier.padding(vertical = 16.dp),
+                modifier = Modifier.padding(vertical = dimensionResource(R.dimen.medium_padding)),
                 text = "${player.firstName} ${player.lastName}",
                 style = MaterialTheme.typography.titleLarge
             )
@@ -160,7 +160,7 @@ fun TeamShort(onTeamClick: (Team) -> Unit, team: Team, modifier: Modifier = Modi
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
+            .padding(top = dimensionResource(R.dimen.medium_padding))
             .clickable { onTeamClick(team) }) {
         SimpleLabel(R.string.team_label)
         Row(

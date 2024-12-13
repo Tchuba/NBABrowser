@@ -15,10 +15,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.example.nbabrowser.R
 import com.example.nbabrowser.ui.theme.NBABrowserTheme
 
@@ -29,7 +29,7 @@ fun LoadingScreen(modifier: Modifier = Modifier) {
         modifier = modifier.fillMaxSize()
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.width(64.dp),
+            modifier = Modifier.width(dimensionResource(R.dimen.loading_indicator_size)),
             color = MaterialTheme.colorScheme.secondary,
             trackColor = MaterialTheme.colorScheme.surfaceVariant,
         )
@@ -47,13 +47,15 @@ fun ErrorScreen(modifier: Modifier = Modifier) {
         Image(
             painter = painterResource(id = R.drawable.ic_connection_error), contentDescription = ""
         )
-        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(16.dp))
+        Text(text = stringResource(R.string.loading_failed), modifier = Modifier.padding(
+            dimensionResource(R.dimen.medium_padding)
+        ))
     }
 }
 
 @Composable
 fun ValueWithLabel(@StringRes title: Int, text: String, modifier: Modifier = Modifier) {
-    Column (modifier = modifier.fillMaxWidth().padding(top = 8.dp)){
+    Column (modifier = modifier.fillMaxWidth().padding(top = dimensionResource(R.dimen.small_padding))){
         SimpleLabel(title)
         Text(
             text,
