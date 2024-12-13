@@ -30,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -114,8 +113,8 @@ fun PlayerDetail(onTeamClick: (Team) -> Unit, player: Player, modifier: Modifier
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             GlideImage(
-                model = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png",
-                contentDescription = "Player image",
+                model = player.photo,
+                contentDescription = stringResource(R.string.player_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(dimensionResource(R.dimen.large_photo_size))

@@ -22,4 +22,5 @@
     <string name="draft_year_label">Draft year</string>
     <string name="draft_round_label">Draft round</string>
     <string name="draft_number_label">Draft number</string>
+    <string name="player_image">Player image</string>
 </resources>

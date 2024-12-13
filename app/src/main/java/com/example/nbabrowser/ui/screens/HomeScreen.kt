@@ -30,8 +30,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -152,8 +152,8 @@ fun PlayerItem(player: Player, modifier: Modifier = Modifier) {
     ) {
         Row() {
             GlideImage(
-                model = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png",
-                contentDescription = "Player image",
+                model = player.photo,
+                contentDescription = stringResource(R.string.player_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(dimensionResource(R.dimen.small_photo_size))
             )
