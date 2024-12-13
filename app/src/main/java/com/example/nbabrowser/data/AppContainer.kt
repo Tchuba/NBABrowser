@@ -15,6 +15,11 @@ interface AppContainer {
     val nbaRepository: NBARepository
 }
 
+/**
+ * Binding retrofit to network repository.
+ *
+ * Authorization header is added to each request through interceptor.
+ */
 class DefaultAppContainer: AppContainer {
     private val BASE_URL = "https://api.balldontlie.io/v1/"
 

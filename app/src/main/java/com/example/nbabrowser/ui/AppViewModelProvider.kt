@@ -10,6 +10,9 @@ import com.example.nbabrowser.ui.screens.HomeViewModel
 import com.example.nbabrowser.ui.screens.PlayerViewModel
 import com.example.nbabrowser.ui.screens.TeamViewModel
 
+/**
+ * View model initialization through a shared factory, binding the necessary repository.
+ */
 object AppViewModelProvider {
     val Factory = viewModelFactory {
         initializer {

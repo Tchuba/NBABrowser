@@ -25,6 +25,7 @@ data class Player(
     @SerialName(value = "draft_number")
     val draftNumber: Int?,
     val team: Team,
+    // API doesn't return photos, so a placeholder is used.
     @Transient
     val photo: String = "https://variety.com/wp-content/uploads/2021/07/Rick-Astley-Never-Gonna-Give-You-Up.png"
 )

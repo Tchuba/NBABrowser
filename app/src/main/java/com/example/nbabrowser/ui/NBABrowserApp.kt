@@ -29,12 +29,6 @@ import com.example.nbabrowser.ui.screens.PlayerScreen
 import com.example.nbabrowser.ui.screens.TeamDestination
 import com.example.nbabrowser.ui.screens.TeamScreen
 
-enum class NBAScreen {
-    Home,
-    Player,
-    Team
-}
-
 @Composable
 fun NBABrowserApp(
     navController: NavHostController = rememberNavController(),

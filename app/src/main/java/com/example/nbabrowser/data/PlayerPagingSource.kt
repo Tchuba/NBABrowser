@@ -5,6 +5,9 @@ import androidx.paging.PagingState
 import com.example.nbabrowser.model.Player
 import com.example.nbabrowser.network.PAGE_SIZE
 
+/**
+ * Wraps pagination logic
+ */
 class PlayerPagingSource(
     private val repository: NBARepository
 ): PagingSource<Int, Player>() {
